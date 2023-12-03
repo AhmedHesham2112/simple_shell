@@ -7,7 +7,11 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdbool.h>
 
-
+void show_prompt(void);
+void _print(const char *command);
+char *check_command(char *command);
+void execution(const char *command);
 
 #endif
