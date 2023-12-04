@@ -14,4 +14,8 @@ void _print(const char *command);
 char *check_command(char *command);
 void execution(const char *command);
 
+/* these are helpful functions to the main functions*/
+
+char *addTextToStart(const char *original, const char *textToAdd);
+int find_command_path(const char *command, char *command_path);
 #endif
