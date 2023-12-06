@@ -10,8 +10,8 @@ void execution(const char *command)
 {
 	pid_t child_pid;
 	char *path = getenv("PATH");
-	char *args[10], *paths[20], *path_arg = malloc(sizeof(char) * 100);
-	int arg_count = 0, i = 0, status = 0;
+	char *args[100], *paths[100], path_arg[100];
+	int arg_count = 0, i = 0, status = 0, flag = 0;
 	char *token = strtok((char *)command, " ");
 
 	while (token != NULL)
@@ -50,11 +50,14 @@ void execution(const char *command)
 	}
 	else
 	{
-		while (paths[i] != NULL)
+		while (paths[i] != NULL && flag == 0)
 		{
+			printf("hellooooooo%s    %i\n", paths[i], flag);
 			_strcpy(path_arg, paths[i]);
 			_strcat(path_arg, "/");
 			_strcat(path_arg, args[0]);
+			printf("hellooooooo%s    %i\n", paths[i], flag);
+
 			if (access(path_arg, F_OK) == 0)
 			{
 				child_pid = fork();
@@ -65,6 +68,8 @@ void execution(const char *command)
 				}
 				else if (child_pid == 0)
 				{
+					flag = 1;
+					printf("hellooooooo%s    %i\n", paths[i], flag);
 					execve(path_arg, args, NULL);
 					_print("./shell: No such file or directory\n");
 					exit(EXIT_FAILURE);
@@ -73,8 +78,17 @@ void execution(const char *command)
 				{
 					wait(&status);
 				}
+				printf("hellooooooo%s    child%i\n", paths[i], getpid());
 			}
 			i++;
+			printf("hellooooooo%s    %i\n", path_arg, flag);
+
+			if (flag == 1)
+			{
+				printf("hellooooooo%s    %i\n", path_arg, flag);
+
+				break;
+			}
 		}
 		_print("./shell: Command not found\n");
 	}
