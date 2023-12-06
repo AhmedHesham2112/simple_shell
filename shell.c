@@ -12,9 +12,10 @@ int main(void)
 
 	while (true)
 	{
-		show_prompt();
+		if (isatty(STDIN_FILENO) != 0)
+			show_prompt();
 		execution(check_command(command));
 	}
-
+	free(command);
 	return (0);
 }

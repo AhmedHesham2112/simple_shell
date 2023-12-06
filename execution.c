@@ -9,8 +9,18 @@
 void execution(const char *command)
 {
 	pid_t child_pid;
+	char *args[20];
+	int arg_count = 0, status = 0;
+	char *token = strtok((char *)command, " ");
 
-	if (access(command, F_OK) == 0)
+	while (token != NULL)
+	{
+		args[arg_count++] = token;
+		token = strtok(NULL, " ");
+	}
+	args[arg_count] = NULL;
+
+	if (access(args[0], F_OK) == 0)
 	{
 		child_pid = fork();
 		if (child_pid == -1)
@@ -20,23 +30,13 @@ void execution(const char *command)
 		}
 		else if (child_pid == 0)
 		{
-			char *args[120];
-			int arg_count = 0;
-			char *token = strtok((char *)command, " ");
-
-			while (token != NULL)
-			{
-				args[arg_count++] = token;
-				token = strtok(NULL, " ");
-			}
-			args[arg_count] = NULL;
 			execve(args[0], args, NULL);
 			_print("./shell: No such file or directory\n");
 			exit(EXIT_FAILURE);
 		}
 		else
 		{
-			wait(NULL);
+			wait(&status);
 		}
 	}
 	else

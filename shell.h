@@ -18,4 +18,5 @@ void execution(const char *command);
 
 char *addTextToStart(const char *original, const char *textToAdd);
 int find_command_path(const char *command, char *command_path);
+char *tokenizer(char *s, char *c);
 #endif

@@ -10,23 +10,12 @@ char *check_command(char *command)
 	ssize_t characters;
 
 	characters = getline(&command, &bufsize, stdin);
-
 	if (characters == -1)
 	{
-		_print("Error while reading input.\n");
 		exit(EXIT_FAILURE);
 	}
 	else if (characters > 0 && command[characters - 1] == '\n')
 	{
-		if (command[0] != '/')
-		{
-			char *path = "/bin/";
-			char *newCommand = addTextToStart(command, path);
-			size_t len = strlen(newCommand);
-
-			newCommand[len - 1] = '\0';
-			return (newCommand);
-		}
 		command[characters - 1] = '\0';
 	}
 	return (command);
