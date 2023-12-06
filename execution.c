@@ -9,8 +9,9 @@
 void execution(const char *command)
 {
 	pid_t child_pid;
-	char *args[20];
-	int arg_count = 0, status = 0;
+	char *path = getenv("PATH");
+	char *args[10], *paths[20], *path_arg = malloc(sizeof(char) * 100);
+	int arg_count = 0, i = 0, status = 0;
 	char *token = strtok((char *)command, " ");
 
 	while (token != NULL)
@@ -20,6 +21,14 @@ void execution(const char *command)
 	}
 	args[arg_count] = NULL;
 
+	token = strtok((char *)path, ":");
+	arg_count = 0;
+	while (token != NULL)
+	{
+		paths[arg_count++] = token;
+		token = strtok(NULL, ":");
+	}
+	paths[arg_count] = NULL;
 	if (access(args[0], F_OK) == 0)
 	{
 		child_pid = fork();
@@ -41,6 +50,32 @@ void execution(const char *command)
 	}
 	else
 	{
+		while (paths[i] != NULL)
+		{
+			_strcpy(path_arg, paths[i]);
+			_strcat(path_arg, "/");
+			_strcat(path_arg, args[0]);
+			if (access(path_arg, F_OK) == 0)
+			{
+				child_pid = fork();
+				if (child_pid == -1)
+				{
+					_print("Error forking process.\n");
+					exit(EXIT_FAILURE);
+				}
+				else if (child_pid == 0)
+				{
+					execve(path_arg, args, NULL);
+					_print("./shell: No such file or directory\n");
+					exit(EXIT_FAILURE);
+				}
+				else
+				{
+					wait(&status);
+				}
+			}
+			i++;
+		}
 		_print("./shell: Command not found\n");
 	}
 }
