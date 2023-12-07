@@ -9,13 +9,15 @@
 int main(void)
 {
 	char command[120];
+	char *new_command;
 
 	while (true)
 	{
 		if (isatty(STDIN_FILENO) != 0)
 			show_prompt();
-		execution(check_command(command));
+		new_command = check_command(command);
+		execution(new_command);
 	}
-	free(command);
+	free(new_command);
 	return (0);
 }
