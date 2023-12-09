@@ -6,7 +6,7 @@
  */
 char *check_command(char *command)
 {
-	size_t bufsize = sizeof(command);
+	size_t bufsize = 120;
 	ssize_t characters;
 
 	characters = getline(&command, &bufsize, stdin);

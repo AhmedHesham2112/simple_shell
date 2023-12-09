@@ -19,7 +19,8 @@ void execution(const char *command)
 		token = strtok(NULL, " ");
 	}
 	args[arg_count] = NULL;
-
+	if (args[0] == NULL)
+		return;
 	if (access(args[0], F_OK) == 0)
 	{
 		child_pid = fork();
@@ -49,27 +50,27 @@ void execution(const char *command)
 
 void execution2(char **args)
 {
-	pid_t child_pid;
 	char *path = getenv("PATH"), *path_dup = _strdup(path), *paths[100];
-	int arg_count = 0, i = 0, status = 0;
+	int arg_count = 0, i = 0, status = 0, child_pid;
 	char *token = strtok((char *)path_dup, ":"), path_arg[100];
 
+	if (path_dup == NULL)
+		exit(EXIT_FAILURE);
 	while (token != NULL)
 	{
 		paths[arg_count++] = token;
 		token = strtok(NULL, ":");
 	}
 	paths[arg_count] = NULL;
-	free(path_dup);
-	while (paths[i] != NULL)
+	for (i = 0; paths[i] != NULL; i++)
 	{
 		_strcpy(path_arg, paths[i]);
 		_strcat(path_arg, "/");
 		_strcat(path_arg, args[0]);
 		if (access(path_arg, F_OK) == 0)
 			break;
-		i++;
 	}
+	free(path_dup);
 	if (access(path_arg, F_OK) == 0)
 	{
 		child_pid = fork();
