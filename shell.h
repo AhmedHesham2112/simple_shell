@@ -14,6 +14,8 @@ void _print(const char *command);
 char *check_command(char *command);
 void execution(const char *command);
 void execution2(char **args);
+void env_print(void);
+extern char **environ;
 
 /* these are helpful functions to the main functions*/
 

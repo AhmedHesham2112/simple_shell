@@ -11,17 +11,22 @@ void execution(const char *command)
 	pid_t child_pid;
 	char *args[100];
 	int arg_count = 0, status = 0;
-	char *token = strtok((char *)command, " ");
+	char *token = strtok((char *)command, " "), *env_var = "env";
 
 	while (token != NULL)
 	{
 		args[arg_count++] = token;
 		token = strtok(NULL, " ");
 	}
+
 	args[arg_count] = NULL;
 	if (args[0] == NULL)
 		return;
-	if (access(args[0], F_OK) == 0)
+	if (strcmp(args[0], env_var) == 0)
+	{
+		env_print();
+	}
+	else if (access(args[0], F_OK) == 0)
 	{
 		child_pid = fork();
 		if (child_pid == -1)
@@ -90,4 +95,23 @@ void execution2(char **args)
 	}
 	else
 		_print("./shell: Command not found\n");
+}
+
+/**
+ * env_print - prints the env variables
+ * Return: void
+ */
+
+void env_print(void)
+{
+	size_t i = 0, len = 0;
+	char **env = environ;
+
+	while (env[i])
+	{
+		len = strlen(env[i]);
+		write(STDOUT_FILENO, env[i], len);
+		write(STDOUT_FILENO, "\n", 1);
+		i++;
+	}
 }
