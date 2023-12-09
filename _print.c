@@ -8,5 +8,5 @@
 
 void _print(const char *command)
 {
-	write(STDOUT_FILENO, command, strlen(command));
+	write(STDOUT_FILENO, command, _strlen(command));
 }

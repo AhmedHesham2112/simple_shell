@@ -9,9 +9,9 @@
 void execution(const char *command)
 {
 	pid_t child_pid;
-	char *args[100];
+	char *args[100], *exit_var = "exit", *env_var = "env";
 	int arg_count = 0, status = 0;
-	char *token = strtok((char *)command, " "), *env_var = "env";
+	char *token = strtok((char *)command, " ");
 
 	while (token != NULL)
 	{
@@ -22,10 +22,10 @@ void execution(const char *command)
 	args[arg_count] = NULL;
 	if (args[0] == NULL)
 		return;
-	if (strcmp(args[0], env_var) == 0)
-	{
+	if (_strcmp(args[0], env_var) == 0)
 		env_print();
-	}
+	else if (_strcmp(args[0], exit_var) == 0)
+		exit_print();
 	else if (access(args[0], F_OK) == 0)
 	{
 		child_pid = fork();
@@ -109,9 +109,19 @@ void env_print(void)
 
 	while (env[i])
 	{
-		len = strlen(env[i]);
+		len = _strlen(env[i]);
 		write(STDOUT_FILENO, env[i], len);
 		write(STDOUT_FILENO, "\n", 1);
 		i++;
 	}
+}
+
+/**
+ * exit_print - exits the shell
+ * Return: void
+ */
+
+void exit_print(void)
+{
+	exit(EXIT_SUCCESS);
 }
