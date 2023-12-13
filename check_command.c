@@ -11,7 +11,7 @@ char *check_command(char *command)
 
 	characters = getline(&command, &bufsize, stdin);
 	if (characters == -1)
-		exit(EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
 	else if (characters > 0 && command[characters - 1] == '\n')
 		command[characters - 1] = '\0';
 	return (command);
